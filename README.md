@@ -1,1 +1,1 @@
-# practical-db
+# Practical Web DataBase Design Book
