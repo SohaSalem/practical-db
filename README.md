@@ -10,7 +10,7 @@ Welcome to the Practical Web Database Design Book repository! This repository co
 ## Tools Used
 
 - **Database System:** PostgreSQL
-- **Database Management Tool:** pgAdmin 4 (Version 7.1)
+- **Database Management Tool:** <a href="https://www.postgresql.org/download/"> pgAdmin 4 (Version 7.1)</a>
 - **DB Diagram:** <a href="https://dbdiagram.io/">dbdiagram io</a>
 
 ## Getting Started
