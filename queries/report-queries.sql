@@ -31,3 +31,37 @@ WHERE o.order_date >= date_trunc('month', current_date) - INTERVAL '1 month'
   AND o.order_date < date_trunc('month', current_date)
 GROUP BY c.customer_id, c.first_name, c.last_name
 HAVING SUM(o.total_amount) > 500;
+
+
+/** * Write a SQL query to search for all products with the word "camera" in either the product name or description. */
+Select product_id, name, description from product
+where name like '%camera%' or description like '%camera%';
+
+
+/*
+Can you design a query to suggest popular products in the same category for the same author,
+excluding the Purchsed product from the recommendations?
+*/
+SELECT p.name
+FROM product AS p
+INNER JOIN category AS c ON p.category_id = c.category_id
+WHERE p.category_id = 
+    (SELECT category_id FROM product WHERE product_id = 'de0528f0-3ed0-4849-a6fd-b7952e39e7d9')
+  AND p.product_id <> 'de0528f0-3ed0-4849-a6fd-b7952e39e7d9' -- Exclude the viewed product
+ORDER BY 
+    (SELECT COUNT(*) FROM order_details AS od WHERE od.product_id = p.product_id) DESC
+LIMIT 5;
+
+
+/* I think about editing the product and add author for each column or a seller so the query will be  */
+SELECT p.name
+FROM product AS p
+INNER JOIN category AS c ON p.category_id = c.category_id
+WHERE p.category_id = 
+    (SELECT category_id FROM product WHERE product_id = 'de0528f0-3ed0-4849-a6fd-b7952e39e7d9')
+  AND p.author_id = 
+    (SELECT author_id FROM product WHERE product_id = 'de0528f0-3ed0-4849-a6fd-b7952e39e7d9') -- Same author
+  AND p.product_id <> 'de0528f0-3ed0-4849-a6fd-b7952e39e7d9' -- Exclude the viewed product
+ORDER BY 
+    (SELECT COUNT(*) FROM order_details AS od WHERE od.product_id = p.product_id) DESC
+LIMIT 5;
