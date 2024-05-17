@@ -41,6 +41,7 @@ where name like '%camera%' or description like '%camera%';
 /*
 Can you design a query to suggest popular products in the same category for the same author,
 excluding the Purchsed product from the recommendations?
+this is an example of the product id :  de0528f0-3ed0-4849-a6fd-b7952e39e7d9
 */
 SELECT p.name
 FROM product AS p
