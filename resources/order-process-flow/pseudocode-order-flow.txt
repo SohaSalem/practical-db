@@ -1,0 +1,70 @@
+# Order Placement Process Use Case
+
+function addProductToCart(user, product, quantity):
+  if isUserAuthenticated(user):
+    if isProductAvailable(product, quantity):
+      addProductToShoppingCart(user.cart, product, quantity)
+      return "Product added to cart."
+    else:
+      return "Product is out of stock."
+  else:
+    return "User is not authenticated."
+
+function reviewAndConfirmCart(user):
+  if isUserAuthenticated(user):
+    displayShoppingCart(user.cart)
+    return "Review your cart."
+  else:
+    return "User is not authenticated."
+
+function placeOrder(user):
+  if isUserAuthenticated(user):
+    if isCartValid(user.cart):
+      order = createOrderFromCart(user.cart)
+      if processPayment(order, user.paymentDetails):
+        if arrangeShipping(order, user.address):
+          updateOrderStatus(order, "Confirmed")
+          notifyUserByEmail(user, "Order Confirmation", order.details)
+          return "Order placed successfully."
+        else:
+          updateOrderStatus(order, "Shipping Failed")
+          return "Shipping arrangement failed."
+      else:
+        updateOrderStatus(order, "Payment Failed")
+        return "Payment processing failed."
+    else:
+      return "Shopping cart is invalid."
+  else:
+    return "User is not authenticated."
+
+function processPayment(order, paymentDetails):
+  if isValidPaymentDetails(paymentDetails):
+    paymentResponse = sendPaymentToGateway(order, paymentDetails)
+    if paymentResponse.status == "Confirmed":
+      return true
+    else:
+      return false
+  else:
+    return false
+
+function arrangeShipping(order, address):
+  if isValidAddress(address):
+    shippingResponse = requestShippingService(order, address)
+    if shippingResponse.status == "Confirmed":
+      return true
+    else:
+      return false
+  else:
+    return false
+
+function createOrderFromCart(cart):
+  order = new Order()
+  order.cart = cart
+  order.userID = cart.userID
+  order.orderDate = getCurrentDate()
+  order.status = "Pending"
+  saveOrderToDatabase(order)
+  return order
+
+function notifyUserByEmail(user, subject, body):
+  emailService.sendEmail(user.email, subject, body)
